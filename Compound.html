@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compound Growth Calculator</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+
+  .container {
+    max-width: 500px;
+    margin: auto;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #16a34a;
+  }
+
+  .results {
+    margin-top: 20px;
+    padding: 15px;
+    background: #020617;
+    border-radius: 8px;
+  }
+
+  .results div {
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 15px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Compound Growth</h1>
+
+  <label>Starting Balance ($)</label>
+  <input type="number" id="balance" value="2000">
+
+  <label>Return per Period (%)</label>
+  <input type="number" id="rate" value="5">
+
+  <label>Period Type</label>
+  <select id="periodType">
+    <option value="week">Weekly</option>
+    <option value="month">Monthly</option>
+  </select>
+
+  <label>Number of Periods</label>
+  <input type="number" id="periods" value="52">
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="results" id="results"></div>
+</div>
+
+<script>
+function calculate() {
+  let balance = parseFloat(document.getElementById("balance").value);
+  let rate = parseFloat(document.getElementById("rate").value) / 100;
+  let periods = parseInt(document.getElementById("periods").value);
+  let type = document.getElementById("periodType").value;
+
+  let original = balance;
+  let output = "";
+
+  for (let i = 1; i <= periods; i++) {
+    balance *= (1 + rate);
+
+    if (i % Math.ceil(periods / 10) === 0 || i === periods) {
+      output += `<div>${type} ${i}: $${balance.toFixed(2)}</div>`;
+    }
+  }
+
+  let multiple = (balance / original).toFixed(2);
+
+  document.getElementById("results").innerHTML = `
+    <div><strong>Final Balance:</strong> $${balance.toFixed(2)}</div>
+    <div><strong>Total Gain:</strong> $${(balance - original).toFixed(2)}</div>
+    <div><strong>Multiple:</strong> ${multiple}×</div>
+    <hr>
+    ${output}
+  `;
+}
+</script>
+
+</body>
+</html>
